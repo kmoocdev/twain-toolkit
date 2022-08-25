@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{dfdb4478-1e36-4458-9348-663c80f07ea6}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{9ea4b28b-4f33-454c-9fa0-f994c3b085e5}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;fi;fd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{087c7586-432e-4946-8780-b3145c2f6cc0}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CAPTEST.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DCA_ACQ.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DCA_GLUE.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPECIAL.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Table.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TRIPLETS.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TWACKER.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\twcommon\twndebug.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TWACK_32.DEF">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="TWACK_64.DEF">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TWACK_32.RC">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="TWACK_64.RC">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CAPTEST.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DCA_ACQ.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dca_app.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DCA_GLUE.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dca_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res_32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res_64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPECIAL.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Table.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="triplets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TWACKER.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\twcommon\Twain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\twcommon\twndebug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ICON1.ICO">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TWACKER.ICO">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
