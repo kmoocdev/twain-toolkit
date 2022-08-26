@@ -11,7 +11,7 @@
 // (c) Copyright 1992, Hewlett-Packard Company, all rights reserved.
 //
 /*
-*	Copyright © 1998 TWAIN Working Group: Adobe Systems Incorporated, 
+*	Copyright ?1998 TWAIN Working Group: Adobe Systems Incorporated, 
 *	Canon Information Systems, Eastman Kodak Company, 
 *	Fujitsu Computer Products of America, Genoa Technology, 
 *	Hewlett-Packard Company, Intel Corporation, Kofax Image Products, 
@@ -1088,7 +1088,7 @@ LRESULT FAR PASCAL TW_MainWndProc (HWND hWnd,
 
 /*
 * Function: DrawScrollBar
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: May 29/1998
 * Input: 
 *		hWnd - handle to main app window
@@ -1171,7 +1171,7 @@ void DrawScrollBar(HWND hWnd, SCROLLINFO* si, int nScroll_Id, BITMAP bm)
 
 /*
 * Function: SaveBitmap
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: June 1st/1998
 * Input: 
 *		hWnd - handle to main app window
@@ -1357,7 +1357,7 @@ HGLOBAL CloneDib(HGLOBAL _hDIB)
 
 /*
 * Function: CloseApplication
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: May 25/1998
 * Input: 
 *		hWnd - handle to main app window
@@ -1933,7 +1933,7 @@ void CheckIfAcquire(char attribute[])
 
 /*
 * Function:	OnScrollBar
-* Author:	Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author:	Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date:		March 1998
 * Input:	hWnd - Handle to window with scroll bar.
 *			nScroll_Id - Type of scroll bar.
@@ -2234,7 +2234,7 @@ void OnScrollBar(HWND hWnd, int nScroll_Id, UINT code,
 
 /*
 * Function:	OnKeyDown 
-* Author:	Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author:	Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date:		March 1998
 * Input:	hWnd - Handle to window with scroll bar.
 *			vk - Key data.

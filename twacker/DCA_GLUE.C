@@ -6,7 +6,7 @@
 // All rights reserved.
 //
 //
-/*	Copyright © 1998 TWAIN Working Group: Adobe Systems Incorporated, 
+/*	Copyright ?1998 TWAIN Working Group: Adobe Systems Incorporated, 
 *	Canon Information Systems, Eastman Kodak Company, 
 *	Fujitsu Computer Products of America, Genoa Technology, 
 *	Hewlett-Packard Company, Intel Corporation, Kofax Image Products, 

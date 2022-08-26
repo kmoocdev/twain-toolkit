@@ -12,7 +12,7 @@
 *
 * (c) Copyright 1992, Hewlett-Packard Company, all rights reserved.
 *
-*	Copyright © 1998 TWAIN Working Group: Adobe Systems Incorporated, 
+*	Copyright ?1998 TWAIN Working Group: Adobe Systems Incorporated, 
 *	Canon Information Systems, Eastman Kodak Company, 
 *	Fujitsu Computer Products of America, Genoa Technology, 
 *	Hewlett-Packard Company, Intel Corporation, Kofax Image Products, 
@@ -1310,7 +1310,7 @@ INT_PTR FAR PASCAL SendDlgProc(HWND hDlg,
 
 /*
 * Function: SetControlListBox
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: September 14, 1998
 * Input:
 *		hDlg: Handle tho the dialog window
@@ -1558,7 +1558,7 @@ void SetControlListBox(HWND hDlg, TW_UINT32 IdListBox, TW_UINT32 wmEvent)
 
 /*
 * Function: FrameDlgProc
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: August 18, 1998
 * Input:
 *		hDlgFrame - handle to the dialog window for Frame
@@ -1754,7 +1754,7 @@ INT_PTR FAR PASCAL FrameDlgProc (HWND hDlgFrame,
 
 /*
 * Function: ShowDialogItem
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Input:
 *		hDlg - handle to the dialog window
 *		IdItem - handle to the dialog item 
@@ -2190,7 +2190,7 @@ static void ShowDialogItem(HWND hDlg, HWND IdItem, int iShowItem)
 
 /*
 * Function: SetConType
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Input:
 *		pEntryConType - pointer to the table entry of Container types
 *		hDlg - handle to the dialog window
@@ -3704,7 +3704,7 @@ TW_UINT16 AltTWItemSize(TW_INT16 ItemType)
 
 /*
 * Function: GetCurrentItemType
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: August 28/1998
 * Input:
 *		hDlg - 
@@ -3752,7 +3752,7 @@ void GetCurrentItemType(HWND hDlg, pTABLEENTRY pEntry)
 
 /*
 * Function: ClearTheControl
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: August 31, 1998
 * Input:
 *		hDlg: Handle tho the dialog window
@@ -3815,7 +3815,7 @@ void ClearTheControl(HWND hDlg)
 
 /*
 * Function: SetItemListBox
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: August 26, 1998
 * Input:
 *		hDlg - handle to the dialog window
@@ -3924,7 +3924,7 @@ void SetItemListBox(HWND hDlg, TW_UINT32 uiItems, pTABLECAP pTableCap, TW_UINT32
 
 /*
 * Function: UnSubClassEditBox
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: August 31, 1998
 * Input:
 *		uiOldIdControl - Id for the last control is display before changing.
@@ -4274,7 +4274,7 @@ void UnSubClassEditBox(TW_UINT32 uiOldIdControl, HWND hDlg)
 
 /*
 * Function: SubClassEditProc
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions Inc. / TWAIN Working Group
 * Date: August 28/1998
 * Input:
 *		hWnd - handle to current control window

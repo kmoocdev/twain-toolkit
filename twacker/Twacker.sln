@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Twacker", "Twacker.vcxproj", "{3A13A242-7ED1-4167-8C39-15ABC3AD3A8A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwainCall", "..\TwainCall\TwainCall.vcxproj", "{F58B52C7-7D37-49A5-AE45-08D34FC6866F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,14 @@ Global
 		{3A13A242-7ED1-4167-8C39-15ABC3AD3A8A}.Release|Win32.Build.0 = Release|Win32
 		{3A13A242-7ED1-4167-8C39-15ABC3AD3A8A}.Release|x64.ActiveCfg = Release|x64
 		{3A13A242-7ED1-4167-8C39-15ABC3AD3A8A}.Release|x64.Build.0 = Release|x64
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Debug|Win32.Build.0 = Debug|Win32
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Debug|x64.ActiveCfg = Debug|x64
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Debug|x64.Build.0 = Debug|x64
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Release|Win32.ActiveCfg = Release|Win32
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Release|Win32.Build.0 = Release|Win32
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Release|x64.ActiveCfg = Release|x64
+		{F58B52C7-7D37-49A5-AE45-08D34FC6866F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

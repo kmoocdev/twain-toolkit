@@ -10,7 +10,7 @@
 //
 // (c) Copyright 1992, Hewlett-Packard Company, all rights reserved.
 //
-/*	Copyright © 1998 TWAIN Working Group: Adobe Systems Incorporated, 
+/*	Copyright ?1998 TWAIN Working Group: Adobe Systems Incorporated, 
 *	Canon Information Systems, Eastman Kodak Company, 
 *	Fujitsu Computer Products of America, Genoa Technology, 
 *	Hewlett-Packard Company, Intel Corporation, Kofax Image Products, 
@@ -202,7 +202,7 @@ BOOL TWAcquire (HWND hWnd, BOOL Show, TW_INT16 Flag)
 
 /*
 * Function: TWSetup
-* Author: Nancy Létourneau / J.F.L. Peripheral Solutions / TWAIN Working Group
+* Author: Nancy L?ourneau / J.F.L. Peripheral Solutions / TWAIN Working Group
 * Date: July 98
 * Input:
 *		hWnd - handle to window
