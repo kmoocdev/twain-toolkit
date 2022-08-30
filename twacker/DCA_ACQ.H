@@ -38,10 +38,13 @@ BOOL TWAcquire (HWND hWnd, BOOL Show, TW_INT16 Flag);
 BOOL TWSetup (HWND hWnd, TW_INT16 Flag);
 BOOL ProcessTWMessage (LPMSG, HWND);
 void TWTransferImage (HWND hWnd);
-void LogMessage(char msg[]);
+void LogMessage(const char msg[]);
 void CloseConnection(HANDLE bitmap);
 void SetAcqFlag (TW_INT16 Flag); 
 BOOL IsSampleSourceActive();
+
+//from old dca_acq.h
+int Set_Ejection();
 
 #endif //_inc_dca_acq_h
 

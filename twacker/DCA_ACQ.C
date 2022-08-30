@@ -116,8 +116,8 @@ BOOL TWAcquire (HWND hWnd, BOOL Show, TW_INT16 Flag)
 	LogMessage("TWAcquire entry\r\n");
 
 	AcqFlag = 0;    //Not ready to transfer yet
-	if (TWOpenDSM () == TRUE)
-	{
+//	if (TWOpenDSM () == TRUE)
+//	{
 		// Please note that another Source may change the system default while
 		// your not looking and simply getting the default will not guarentee
 		// you get what you want.  Suggest saving the dsID structure privately
@@ -127,12 +127,12 @@ BOOL TWAcquire (HWND hWnd, BOOL Show, TW_INT16 Flag)
 		// the system at the moment it is opened.  Changes in available Sources
 		// while the DSM is open may cause unpredictable results. -- ed
 
-		if (TWOpenDS() == TRUE)
-		{
+//		if (TWOpenDS() == TRUE)
+//		{
 			if (TWXferMech (hWnd) == TWRC_SUCCESS)
 			{
-				if (TWAutofeedMenu (hWnd) == TWRC_SUCCESS)
-				{
+//				if (TWAutofeedMenu (hWnd) == TWRC_SUCCESS)
+//				{
 					if (!TWIsDSEnabled())
 					{
 						result = TWEnableDS ((TW_BOOL)Show);
@@ -143,7 +143,7 @@ BOOL TWAcquire (HWND hWnd, BOOL Show, TW_INT16 Flag)
 						//          2 Disable Only
 						//          3 Do Not Disable - only if ShowUI=TRUE
 					}
-				}
+//				}
 			}
 			else
 			{
@@ -151,23 +151,23 @@ BOOL TWAcquire (HWND hWnd, BOOL Show, TW_INT16 Flag)
 				{
 					if (TWCloseDSM(NULL))
 					{
-						CheckSpecialMenu(hWnd, TW_APP_CLOSESM);
+						//CheckSpecialMenu(hWnd, TW_APP_CLOSESM);
 						AcqFlag = 0;                        
 					}
 					else
 					{
-						CheckSpecialMenu(hWnd, TW_APP_CLOSEDS);                 
+						//CheckSpecialMenu(hWnd, TW_APP_CLOSEDS);                 
 					}
 				}
 				return(FALSE);
 			}
-		}
-		else
-		{
-			LogMessage("OpenDS failed -- TWAcquire\r\n");
-			TWCloseDSM(NULL);
-			return(FALSE);
-		}
+//		}
+//		else
+//		{
+//			LogMessage("OpenDS failed -- TWAcquire\r\n");
+//			TWCloseDSM(NULL);
+//			return(FALSE);
+//		}
 
 		/*
 		* Cannot Enable Source
@@ -191,11 +191,11 @@ BOOL TWAcquire (HWND hWnd, BOOL Show, TW_INT16 Flag)
 			CheckSpecialMenu(hWnd, TW_APP_DISABLE);              
 			}
 		} 
-	}
-	else
-	{
-		return(FALSE);
-	}
+//	}
+//	else
+//	{
+//		return(FALSE);
+//	}
 
 	return(result);  
 }   
@@ -487,6 +487,26 @@ VOID TWTransferImage(HWND hWnd)
 {
 	ASSERT(hWnd);
 
+        DoNativeTransfer(hWnd);
+
+        if (AcqFlag == 0)
+        {
+                TWIsDSMOpen();
+        }
+        else if (AcqFlag == 1)
+        {
+                if(!TWIsDSMOpen())
+                        AcqFlag = 0;
+        }
+        else if (AcqFlag == 2)
+        {
+                if (TWDisableDS())
+                        AcqFlag = 0;
+        }
+
+        return;
+
+#if 0
 	/* 
 	* Do MSG_GET for the ICAP_XFERMECH capability when it's call in the
 	* Special Menu to know the Transfer Mode
@@ -603,7 +623,17 @@ VOID TWTransferImage(HWND hWnd)
 		CheckSpecialMenu(hWnd, TW_APP_TRANSFER);                        
 	}
 	return;
+#endif
 }   
+
+// from old dca_acq.cpp
+
+BOOL gbStop = FALSE;
+TW_UINT16 gtwRC2 = TWRC_FAILURE;
+
+LRESULT FAR(PASCAL* PrevProc)(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+LRESULT FAR(PASCAL* CallBackProc)(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+LRESULT FAR(PASCAL* CallBackEjectProc)(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
 /*
 * Function: DoNativeTransfer -- 
@@ -613,6 +643,10 @@ VOID TWTransferImage(HWND hWnd)
 * Output: none
 * Comment: 
 */
+
+// from old source implementation
+HWND mhWnd;
+
 static void DoNativeTransfer(HWND hWnd)
 {
 	TW_PENDINGXFERS     twPendingXfer;
@@ -628,6 +662,9 @@ static void DoNativeTransfer(HWND hWnd)
 	memset(buffer, 0, sizeof(char[2048]));
 
 	ASSERT(hWnd);
+
+	// 2022-08-25
+	mhWnd = hWnd;
 
 	/*
 	* Do until there are no more pending transfers
@@ -654,20 +691,30 @@ static void DoNativeTransfer(HWND hWnd)
 						MSG_GET, 
 						(TW_MEMREF)&hBitMap);
 
+		WPARAM wParam;
 		switch (twRC)
 		{
 			case TWRC_XFERDONE:  // Session is in State 7
+				wParam = (WPARAM)hBitMap;
+				if (!wParam)
+					OutputDebugString("TWRC_XFERDONE - NULL pDib \n");
 				if (MessageLevel() >= ML_FULL)
 				{
 					ShowRC_CC(hWnd, 0, 0, 0, "TWRC_XFERDONE", 
 							"DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
 				}                
+
+// 				MessageBox(NULL,"CallBackEjectProc_start", "t", MB_OK);
+				(*CallBackEjectProc)(hWnd, 0, wParam, 0);
+// 				MessageBox(NULL,"CallBackEjectProc_End", "t", MB_OK);
+
 				hbm_acq = (HBITMAP)hBitMap;
 
 				/*
 				* Acknowledge the end of the transfer 
 				* and transition to state 6/5
 				*/
+#if 0
 				twRC2 = CallDSMEntry(&appID,
 									&dsID, 
 									DG_CONTROL,
@@ -720,6 +767,7 @@ static void DoNativeTransfer(HWND hWnd)
 					wsprintf(buffer,"Images = %d",twPendingXfer.Count);
 					ShowRC_CC(NULL,0,0,0,buffer,"Pending Transfers");
 				}
+#endif
 				break;
 
 			/*
@@ -2117,4 +2165,599 @@ void FlipBitMap(HWND hWnd, HANDLE hBM, TW_INT16 PixType)
 		DSM_UnlockMemory(hBM);
 	}
 	return;
+}
+
+
+static void DoNativeTransfer2(HWND hWnd)
+{
+	TW_PENDINGXFERS     twPendingXfer;
+	TW_UINT16           twRC = TWRC_FAILURE;
+	TW_UINT16           twRC2 = TWRC_FAILURE;
+	TW_UINT32           hBitMap = NULL;
+	HANDLE              hbm_acq = NULL;     // handle to bit map from Source to ret to App
+	char buffer[2048];
+
+	LPBITMAPINFOHEADER lpdib = NULL;
+
+	memset(&twPendingXfer, 0, sizeof(TW_PENDINGXFERS));
+	memset(buffer, 0, sizeof(char[2048]));
+
+	mhWnd = hWnd;
+
+	ASSERT(hWnd);
+	OutputDebugString("Do Native Transfer \n");
+
+	/*
+	* Do until there are no more pending transfers
+	* explicitly initialize the our flags
+	*/
+	twPendingXfer.Count = 0;
+	do
+	{
+		if (MessageLevel() >= ML_INFO)
+		{
+			ShowImageInfo(hWnd);
+			ShowImageLayout(hWnd);
+			ShowCapability(hWnd, ICAP_PIXELFLAVOR);
+			ShowCapability(hWnd, ICAP_PIXELTYPE);
+		}
+
+		/*
+		* Initiate Native Transfer
+		*/
+		twRC = CallDSMEntry(&appID,
+			&dsID,
+			DG_IMAGE,
+			DAT_IMAGENATIVEXFER,
+			MSG_GET,
+			(TW_MEMREF)&hBitMap);
+		char szDebug[256];
+		sprintf(szDebug, "native transfer return code: %d \n", twRC);
+		OutputDebugString(szDebug);
+
+		WPARAM wParam;
+		switch (twRC)
+		{
+		case TWRC_XFERDONE:  // Session is in State 7
+			wParam = (WPARAM)hBitMap;
+			if (!wParam)
+				OutputDebugString("TWRC_XFERDONE - NULL pDib \n");
+
+
+
+			// 				MessageBox(NULL,"CallBackEjectProc_start", "t", MB_OK);
+			(*CallBackEjectProc)(hWnd, 0, wParam, 0);
+			// 				MessageBox(NULL,"CallBackEjectProc_End", "t", MB_OK);
+
+
+			if (MessageLevel() >= ML_FULL)
+			{
+				ShowRC_CC(hWnd, 0, 0, 0, "TWRC_XFERDONE",
+					"DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+			}
+			hbm_acq = (HBITMAP)hBitMap;
+
+			/*
+			* Acknowledge the end of the transfer
+			* and transition to state 6/5
+			*/
+			// 				MessageBox(NULL,"CallDSMEntry_start", "t", MB_OK);
+
+#if 1
+
+			twRC2 = CallDSMEntry(&appID,
+				&dsID,
+				DG_CONTROL,
+				DAT_PENDINGXFERS,
+				MSG_ENDXFER,
+				(TW_MEMREF)&twPendingXfer);
+
+			// 				char s[100];
+			// 
+			// 				sprintf(s,"%d",twPendingXfer.Count);
+			// 
+			// 				MessageBox(NULL,s,"t",MB_OK);
+
+			// 				MessageBox(NULL,"CallDSMEntry_End1", "t", MB_OK);
+
+			if (twRC2 != TWRC_SUCCESS)
+			{
+				if (MessageLevel() >= ML_ERROR)
+				{
+					ShowRC_CC(hWnd, 1, twRC2, 1,
+						"",
+						"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+				}
+			}
+
+			wsprintf(buffer, "Pending Xfers = %d\r\n", twPendingXfer.Count);
+			LogMessage(buffer);
+
+			//////////////////////////////////////////////////////////////////////////
+			// MSG_STOPFEEDER here
+			//////////////////////////////////////////////////////////////////////////
+			if (twPendingXfer.Count != 0 && gbStop == TRUE)
+			{
+				twRC2 = CallDSMEntry(&appID,
+					&dsID,
+					DG_CONTROL,
+					DAT_PENDINGXFERS,
+					MSG_RESET,
+					(TW_MEMREF)&twPendingXfer);
+				if (twRC2 != TWRC_SUCCESS)
+				{
+					if (MessageLevel() >= ML_ERROR)
+					{
+						ShowRC_CC(hWnd, 1, twRC2, 1,
+							"",
+							"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+					}
+				}
+				gtwRC2 = twRC2;
+				gbStop = FALSE;
+			}
+
+			if (twPendingXfer.Count == 0)
+			{
+				OutputDebugString("twPendingXfer.Count = 0 \n");
+				if (hbm_acq && (lpdib = (LPBITMAPINFOHEADER)GlobalLock(hbm_acq)) != NULL)
+				{
+					CloseConnection(NULL);
+					GlobalUnlock(hbm_acq);
+				}
+				(*CallBackEjectProc)(hWnd, 0, 0, TWCRC_SCAN_DONE);
+			}
+
+			if (hbm_acq >= (HANDLE)VALID_HANDLE)
+			{
+
+				SendMessage(hWnd, PM_XFERDONE, (WPARAM)hbm_acq, 0);
+			}
+			else
+			{
+				SendMessage(hWnd, PM_XFERDONE, NULL, 0);
+			}
+
+			/*
+			* showRC_CC is a safe operation here since there will be no triplet
+			* calls generated
+			*/
+			if ((MessageLevel() >= ML_INFO) | AutoFeedOn())
+			{
+				wsprintf(buffer, "Images = %d", twPendingXfer.Count);
+				ShowRC_CC(NULL, 0, 0, 0, buffer, "Pending Transfers");
+			}
+
+
+
+#endif
+
+			break;
+
+
+			/*
+			* the user canceled or wants to rescan the image
+			* something wrong, abort the transfer and delete the image
+			* pass a null ptr back to App
+			*/
+		case TWRC_CANCEL:   // Session is in State 7
+			(*CallBackEjectProc)(hWnd, 0, 0, TWCRC_SCAN_CANCELED);
+			if (MessageLevel() >= ML_ERROR)
+			{
+				ShowRC_CC(hWnd, 0, 0, 0, "TWRC_CANCEL",
+					"DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+			}
+
+			/*
+			* Source (or User) Canceled Transfer
+			* transistion to state 6/5
+			*/
+			twRC2 = CallDSMEntry(&appID,
+				&dsID,
+				DG_CONTROL,
+				DAT_PENDINGXFERS,
+				MSG_ENDXFER,
+				(TW_MEMREF)&twPendingXfer);
+
+			if (twRC2 != TWRC_SUCCESS)
+			{
+				if (MessageLevel() >= ML_ERROR)
+				{
+					ShowRC_CC(hWnd, 1, twRC2, 1,
+						"",
+						"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+				}
+			}
+
+			if (twPendingXfer.Count == 0)
+				CloseConnection(NULL);
+
+			SendMessage(hWnd, PM_CANCEL, NULL, 0);
+			break;
+
+		case TWRC_FAILURE:  //Session is in State 6
+			OutputDebugString("TWRC_FAILURE");
+			/*
+			* The transfer failed
+			*/
+			if (MessageLevel() >= ML_ERROR)
+			{
+				ShowRC_CC(hWnd, 1, TWRC_FAILURE, 1,
+					"", "DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+			}
+
+			/*
+			* Abort the image
+			* Enhancement: Check Condition Code and attempt recovery
+			*/
+			twRC2 = CallDSMEntry(&appID,
+				&dsID,
+				DG_CONTROL,
+				DAT_PENDINGXFERS,
+				MSG_ENDXFER,
+				(TW_MEMREF)&twPendingXfer);
+
+			if (twRC2 != TWRC_SUCCESS)
+			{
+				if (MessageLevel() >= ML_ERROR)
+				{
+					ShowRC_CC(hWnd, 1, twRC2, 1,
+						"",
+						"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+				}
+			}
+
+			if (twPendingXfer.Count == 0)
+				CloseConnection(NULL);
+
+			SendMessage(hWnd, PM_XFERDONE, NULL, 0);
+			break;
+
+		default:    //Sources should never return any other RC
+			OutputDebugString("default: Unknown Return Code");
+			if (MessageLevel() >= ML_ERROR)
+			{
+				ShowRC_CC(hWnd, 0, 0, 0, "Unknown Return Code",
+					"DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+			}
+
+			/*
+			* Abort the image
+			* Enhancement: Check Condition Code and attempt recovery instead
+			*/
+			twRC2 = CallDSMEntry(&appID,
+				&dsID,
+				DG_CONTROL,
+				DAT_PENDINGXFERS,
+				MSG_ENDXFER,
+				(TW_MEMREF)&twPendingXfer);
+
+			if (twRC2 != TWRC_SUCCESS)
+			{
+				if (MessageLevel() >= ML_ERROR)
+				{
+					ShowRC_CC(hWnd, 1, twRC2, 1,
+						"",
+						"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+				}
+			}
+
+			if (twPendingXfer.Count == 0)
+				CloseConnection(NULL);
+
+			SendMessage(hWnd, PM_XFERDONE, NULL, 0);
+			break;
+		}
+
+	} while (twPendingXfer.Count != 0);
+
+	AcqFlag = 0;
+	return;
+}
+
+
+extern BOOL gbStop;
+
+int Set_Ejection()
+{
+
+
+	if (gbStop == TRUE)
+	{
+		DoNativeTransfer2(mhWnd);
+		return 0;
+	}
+
+	// 	char s[100];
+
+
+	// 	MessageBox(NULL,"CallDSMEntry", "t", MB_OK);
+	TW_PENDINGXFERS     twPendingXfer;
+	TW_UINT16           twRC = TWRC_FAILURE;
+	TW_UINT16           twRC2 = TWRC_FAILURE;
+	TW_UINT32           hBitMap = NULL;
+	HANDLE              hbm_acq = NULL;     // handle to bit map from Source to ret to App
+	char buffer[2048];
+
+	LPBITMAPINFOHEADER lpdib = NULL;
+
+	memset(&twPendingXfer, 0, sizeof(TW_PENDINGXFERS));
+	memset(buffer, 0, sizeof(char[2048]));
+
+	//	ASSERT(hWnd);
+	OutputDebugString("Do Native Transfer \n");
+
+	/*
+	* Do until there are no more pending transfers
+	* explicitly initialize the our flags
+	*/
+	// 	twPendingXfer.Count = 0;
+
+		if (MessageLevel() >= ML_INFO)
+	{
+		ShowImageInfo(mhWnd);
+		ShowImageLayout(mhWnd);
+		ShowCapability(mhWnd, ICAP_PIXELFLAVOR);
+		ShowCapability(mhWnd, ICAP_PIXELTYPE);
+	}
+
+	char szDebug[256];
+	sprintf(szDebug, "native transfer return code: %d \n", twRC);
+	OutputDebugString(szDebug);
+
+
+	twRC2 = CallDSMEntry(&appID,
+		&dsID,
+		DG_CONTROL,
+		DAT_PENDINGXFERS,
+		MSG_ENDXFER,
+		(TW_MEMREF)&twPendingXfer);
+
+	// 			MessageBox(NULL,"CallDSMEntry_End", "t", MB_OK);
+
+	// 			sprintf(s, "%d", twPendingXfer.Count);
+	// 			MessageBox(NULL,s, "t", MB_OK);
+
+	if (twRC2 != TWRC_SUCCESS)
+	{
+		if (MessageLevel() >= ML_ERROR)
+		{
+			ShowRC_CC(mhWnd, 1, twRC2, 1,
+				"",
+				"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+		}
+	}
+
+	wsprintf(buffer, "Pending Xfers = %d\r\n", twPendingXfer.Count);
+	LogMessage(buffer);
+
+	//////////////////////////////////////////////////////////////////////////
+	// MSG_STOPFEEDER here
+	//////////////////////////////////////////////////////////////////////////
+	if (twPendingXfer.Count != 0 && gbStop == TRUE)
+	{
+		twRC2 = CallDSMEntry(&appID,
+			&dsID,
+			DG_CONTROL,
+			DAT_PENDINGXFERS,
+			MSG_RESET,
+			(TW_MEMREF)&twPendingXfer);
+		if (twRC2 != TWRC_SUCCESS)
+		{
+			if (MessageLevel() >= ML_ERROR)
+			{
+				ShowRC_CC(mhWnd, 1, twRC2, 1,
+					"",
+					"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+			}
+		}
+		gtwRC2 = twRC2;
+		gbStop = FALSE;
+	}
+
+	if (twPendingXfer.Count == 0)
+	{
+		OutputDebugString("twPendingXfer.Count = 0 \n");
+		if (hbm_acq && (lpdib = (LPBITMAPINFOHEADER)GlobalLock(hbm_acq)) != NULL)
+		{
+			CloseConnection(NULL);
+			GlobalUnlock(hbm_acq);
+		}
+		(*CallBackEjectProc)(mhWnd, 0, 0, TWCRC_SCAN_DONE);
+
+		return -1;
+
+	}
+
+	if (hbm_acq >= (HANDLE)VALID_HANDLE)
+	{
+		SendMessage(mhWnd, PM_XFERDONE, (WPARAM)hbm_acq, 0);
+	}
+	else
+	{
+		SendMessage(mhWnd, PM_XFERDONE, NULL, 0);
+	}
+
+	/*
+	* showRC_CC is a safe operation here since there will be no triplet
+	* calls generated
+	*/
+	if ((MessageLevel() >= ML_INFO) | AutoFeedOn())
+	{
+		wsprintf(buffer, "Images = %d", twPendingXfer.Count);
+		ShowRC_CC(NULL, 0, 0, 0, buffer, "Pending Transfers");
+	}
+
+	// 	if (MessageLevel() >= ML_INFO)
+	// 		{
+	// 			ShowImageInfo(mhWnd);
+	// 			ShowImageLayout(mhWnd);
+	// 			ShowCapability(mhWnd, ICAP_PIXELFLAVOR);
+	// 			ShowCapability(mhWnd, ICAP_PIXELTYPE);
+	// 		}
+
+			/*
+			* Initiate Native Transfer
+			*/
+	twRC = CallDSMEntry(&appID,
+		&dsID,
+		DG_IMAGE,
+		DAT_IMAGENATIVEXFER,
+		MSG_GET,
+		(TW_MEMREF)&hBitMap);
+	// 		char szDebug[256];
+	sprintf(szDebug, "native transfer return code: %d \n", twRC);
+	OutputDebugString(szDebug);
+
+	WPARAM wParam;
+	switch (twRC)
+	{
+	case TWRC_XFERDONE:  // Session is in State 7
+		wParam = (WPARAM)hBitMap;
+		if (!wParam)
+			OutputDebugString("TWRC_XFERDONE - NULL pDib \n");
+
+
+
+		// 				MessageBox(NULL,"CallBackEjectProc_start", "t", MB_OK);
+		(*CallBackEjectProc)(mhWnd, 0, wParam, 0);
+		// 				MessageBox(NULL,"CallBackEjectProc_End", "t", MB_OK);
+
+
+		if (MessageLevel() >= ML_FULL)
+		{
+			ShowRC_CC(mhWnd, 0, 0, 0, "TWRC_XFERDONE",
+				"DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+		}
+		hbm_acq = (HBITMAP)hBitMap;
+
+		/*
+		* Acknowledge the end of the transfer
+		* and transition to state 6/5
+		*/
+		// 				MessageBox(NULL,"CallDSMEntry_start", "t", MB_OK);
+
+
+
+		break;
+
+
+		/*
+		* the user canceled or wants to rescan the image
+		* something wrong, abort the transfer and delete the image
+		* pass a null ptr back to App
+		*/
+	case TWRC_CANCEL:   // Session is in State 7
+		(*CallBackEjectProc)(mhWnd, 0, 0, TWCRC_SCAN_CANCELED);
+		if (MessageLevel() >= ML_ERROR)
+		{
+			ShowRC_CC(mhWnd, 0, 0, 0, "TWRC_CANCEL",
+				"DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+		}
+
+		/*
+		* Source (or User) Canceled Transfer
+		* transistion to state 6/5
+		*/
+		twRC2 = CallDSMEntry(&appID,
+			&dsID,
+			DG_CONTROL,
+			DAT_PENDINGXFERS,
+			MSG_ENDXFER,
+			(TW_MEMREF)&twPendingXfer);
+
+		if (twRC2 != TWRC_SUCCESS)
+		{
+			if (MessageLevel() >= ML_ERROR)
+			{
+				ShowRC_CC(mhWnd, 1, twRC2, 1,
+					"",
+					"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+			}
+		}
+
+		if (twPendingXfer.Count == 0)
+			CloseConnection(NULL);
+
+		SendMessage(mhWnd, PM_CANCEL, NULL, 0);
+		break;
+
+	case TWRC_FAILURE:  //Session is in State 6
+		OutputDebugString("TWRC_FAILURE");
+		/*
+		* The transfer failed
+		*/
+		if (MessageLevel() >= ML_ERROR)
+		{
+			ShowRC_CC(mhWnd, 1, TWRC_FAILURE, 1,
+				"", "DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+		}
+
+		/*
+		* Abort the image
+		* Enhancement: Check Condition Code and attempt recovery
+		*/
+		twRC2 = CallDSMEntry(&appID,
+			&dsID,
+			DG_CONTROL,
+			DAT_PENDINGXFERS,
+			MSG_ENDXFER,
+			(TW_MEMREF)&twPendingXfer);
+
+		if (twRC2 != TWRC_SUCCESS)
+		{
+			if (MessageLevel() >= ML_ERROR)
+			{
+				ShowRC_CC(mhWnd, 1, twRC2, 1,
+					"",
+					"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+			}
+		}
+
+		if (twPendingXfer.Count == 0)
+			CloseConnection(NULL);
+
+		SendMessage(mhWnd, PM_XFERDONE, NULL, 0);
+		break;
+
+	default:    //Sources should never return any other RC
+		OutputDebugString("default: Unknown Return Code");
+		if (MessageLevel() >= ML_ERROR)
+		{
+			ShowRC_CC(mhWnd, 0, 0, 0, "Unknown Return Code",
+				"DG_IMAGE/DAT_IMAGENATIVEXFER/MSG_GET");
+		}
+
+		/*
+		* Abort the image
+		* Enhancement: Check Condition Code and attempt recovery instead
+		*/
+		twRC2 = CallDSMEntry(&appID,
+			&dsID,
+			DG_CONTROL,
+			DAT_PENDINGXFERS,
+			MSG_ENDXFER,
+			(TW_MEMREF)&twPendingXfer);
+
+		if (twRC2 != TWRC_SUCCESS)
+		{
+			if (MessageLevel() >= ML_ERROR)
+			{
+				ShowRC_CC(mhWnd, 1, twRC2, 1,
+					"",
+					"DG_CONTROL / DAT_PENDINGXFERS / MSG_ENDXFER");
+			}
+		}
+
+		if (twPendingXfer.Count == 0)
+			CloseConnection(NULL);
+
+		SendMessage(mhWnd, PM_XFERDONE, NULL, 0);
+		break;
+	}
+
+
+	AcqFlag = 0;
+	return 0;
+
 }

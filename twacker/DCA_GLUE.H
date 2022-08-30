@@ -57,6 +57,7 @@ BOOL TWDisableDS (VOID);
 BOOL TWIsDSEnabled (VOID);
 
 BOOL TWSelectDS (VOID);
+int TWStringDS(const char* szProductName);
 
 VOID GreyMenu (int);
 TW_UINT16 CallDSMEntry(pTW_IDENTITY, pTW_IDENTITY, TW_UINT32,

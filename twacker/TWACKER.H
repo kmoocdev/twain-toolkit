@@ -70,5 +70,23 @@ SIZE_T DSM_Size(TW_HANDLE _pMemory);
 TW_HANDLE DSM_ReAlloc(TW_HANDLE _pMemory, TW_UINT32 _size);
 extern HGLOBAL _ghDIB; // handle to the current DIB
 
+// from old twacker.h
+#define TWCRC_FAILURE                 -TWRC_FAILURE          // -1 /* Application may get TW_STATUS for info on failure */
+#define TWCRC_SUCCESS                  TWRC_SUCCESS          //  0
+#define TWCRC_SCAN_CANCELED           -66
+#define TWCRC_NO_DEVICE                               24
+#define TWCRC_WRONG_DEVICE                    25
+#define TWCRC_DSM_OPEN_FAILED         34
+#define TWCRC_DS_OPEN_FAILED          35
+#define TWCRC_NOT_SUPPORTED                   37
+#define TWCRC_NOT_FRAME                               40
+#define TWCRC_NOT_ARRAY                               41
+#define TWCRC_NOT_STR                         42
+#define TWCRC_NOT_SUPPORTED_FORMAT    43
+#define TWCRC_SCAN_DONE                               45
+#define NOT_SELECTED        101
+#define STRING_SOURCE 102
+#define SELECT_SOURCE 103
+
 #endif //_inc_twacker_h
 

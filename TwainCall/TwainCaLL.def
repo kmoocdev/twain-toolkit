@@ -1,0 +1,39 @@
+LIBRARY      "TwainCaLL"
+DESCRIPTION  'CallEntry Windows Dynamic Link Library'
+
+EXPORTS
+	CALL_InitInstance
+
+	CALL_SelectSource
+	CALL_StringSource
+
+	CALL_TWAppAquire
+	CALL_TWAppAquireFixedName
+	CALL_TWAppQuit
+	CALL_ChangeCount
+
+	CALL_StartSetup
+
+	CALL_SetProperty
+	CALL_SetProperty_Frame
+	CALL_SetProperty_String
+	CALL_SetProperty_Array
+	CALL_CheckCondition
+
+	CALL_GetType
+
+	CALL_SetCap_SetParm
+	CALL_SetCap_DivScan
+	CALL_EjectCtl_MSG_SET
+	CALL_EjectNumbering_MSG_GET
+	CALL_EjectNumbering_MSG_SET
+
+	CALL_StopFeeding
+	CALL_SetWH
+
+	CALL_Get_WinProc
+	CALL_Set_PrevProc
+
+	CALL_Set_Ejection
+
+

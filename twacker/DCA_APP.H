@@ -142,6 +142,8 @@
 #define IDDEST                  111
 
 #define  PM_XFERDONE            WM_USER + 0
+// from old dca_app.h
+#define  PM_CANCEL                              WM_USER + 1
 
 #define OFF     0
 #define ON      1
