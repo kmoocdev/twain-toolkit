@@ -1,0 +1,45 @@
+twaincall dll 이 vc6.0버전으로 제작되어 CALL_InitInstance 함수내의 SetWindowLong 가 c#에서 정상동작하지않음
+따라서 SetWindowLong를 c# 혹은 twaincall 을 감싸고 있는 dll 에서 사용을 하고 twaincall에서는 WinProc을 넘겨주고
+PrevProc을 받아오는 식으로 사용해야 정상동작함.
+
+예시 
+
+[상위 dll ]
+
+LRESULT FAR (PASCAL * PrevProc)(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam);
+
+
+LRESULT FAR PASCAL DLLWndProc(HWND hWnd,UINT iMessage,WPARAM wParam,LPARAM lParam)
+{
+	return (*PrevProc)(hWnd,iMessage, wParam,lParam);
+}
+
+EXPORT_DLL int __stdcall OpenDevice()
+{
+
+	HWND hWnd= GetActiveWindow();
+
+	long dllwinproc;
+
+	CALL_InitInstance( hWnd, (long)TW_CallBackFile,  (long)TW_CallBackMem);
+
+	dllwinproc = CALL_Get_WinProc();  // 새로 만든 함수 
+
+	PrevProc = (LRESULT FAR (PASCAL *)(HWND,UINT,WPARAM,LPARAM))SetWindowLong((HWND)hWnd,GWL_WNDPROC,(LONG)dllwinproc);
+
+	CALL_Set_PrevProc((long)PrevProc);  // 새로 만든 함수
+
+
+	
+	return 0;
+}
+
+
+[twaincall.dll]
+
+CALL_InitInstance 에서
+
+
+PrevProc = (LRESULT FAR (PASCAL *)(HWND,UINT,WPARAM,LPARAM))SetWindowLong((HWND)hWnd,GWL_WNDPROC,(LONG)dllwinproc);
+
+부분 주석 처리  
